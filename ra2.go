@@ -9,10 +9,6 @@ import "strings"
 import "strconv"
 import "os"
 
-func homePage(w http.ResponseWriter, r *http.Request){
-    fmt.Fprintf(w, "Welcome to Walts rest endpoints!")
-}
-
 func handleRequests() {
 
 // call ind functions for this endpoint
