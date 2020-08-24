@@ -52,11 +52,11 @@ func handleRequests() {
 
 func updateMap(v *map[string][3]int, health string, key string, size int) {
 
-      	hash := *v
+	hash := *v
 
 	// health values {red,yellow,green}
 	// increment the appropriate one or set if new key
-        //
+    //
 	health_map := map[string]int {
 		"red": 0,
 		"yellow": 1,
@@ -74,21 +74,33 @@ func updateMap(v *map[string][3]int, health string, key string, size int) {
 	} else {
 
 	// initialize new key
-                hash[key] = [3]int{0,0,0}
+        hash[key] = [3]int{0,0,0}
 		a := hash[key]
 		a[health_map[health]] = size
 		hash[key] = a
 
-        }
+    }
 }
 
 func aggregate(w http.ResponseWriter, r *http.Request) {
 
-        // http handling
-	// call indices endpoint
-	//
+	// Check the parms for X (or method) if passed return 404
+	// We only do GET by default
 
-        var host = os.Getenv("RUN_HOST")
+    for k, v := range r.URL.Query() {
+        fmt.Printf("%s: %s\n", k, v)
+        if  k == "X" {
+			fmt.Println("Only handles GET method by default.")
+			w.WriteHeader(404)
+			return
+        }
+    }
+
+    // http handling
+	// call indices endpoint
+	// RUN_HOST contains the location of your elastic resource
+
+    var host = os.Getenv("RUN_HOST")
 	var url = fmt.Sprintf("http://%s:9200/_cat/indices",host)
 
 	client := &http.Client{}
